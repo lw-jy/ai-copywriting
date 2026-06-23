@@ -11,6 +11,9 @@
 
 import Koa from "koa";
 import bodyParser from "koa-bodyparser";
+import serve from "koa-static";
+import { resolve, dirname } from "node:path";
+import { fileURLToPath } from "node:url";
 import router from "./router";
 import { PORT, USE_MOCK } from "./config";
 import { connectDB } from "./db";
@@ -21,6 +24,11 @@ const log = getLogger("server");
 /* ---------- 应用组装 ---------- */
 
 const app = new Koa();
+
+// 生产环境：托管前端静态文件（public/ 目录）
+const __dirname = dirname(fileURLToPath(import.meta.url));
+const publicDir = resolve(__dirname, "..", "public");
+app.use(serve(publicDir));
 
 app.use(bodyParser());
 app.use(router.routes());
