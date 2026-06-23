@@ -1,0 +1,25 @@
+{
+  "name": "copy-matrix-frontend",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "build:ext": "BUILD_MODE=extension vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@lucide/vue": "^1.17.0",
+    "@microsoft/fetch-event-source": "^2.0.1",
+    "@vitejs/plugin-vue": "^5.2.4",
+    "autoprefixer": "^10.5.0",
+    "postcss": "^8.5.15",
+    "tailwindcss": "^3.4.19",
+    "vite": "^5.4.21",
+    "vue": "^3.5.35"
+  },
+  "devDependencies": {
+    "typescript": "5.7.3",
+    "vue-tsc": "^2.0.0"
+  }
+}

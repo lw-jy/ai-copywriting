@@ -11,7 +11,16 @@ __v0_jsx-dev-runtime.ts
 .env.local
 .env.*.local
 
+# Build output
+frontend/dist/
+frontend/dist-extension/
+
 # Common ignores
 node_modules
 .next/
 .DS_Store
+
+# Temp / generated
+desktop.png
+pnpm-lock.yaml
+parse-pdf.js
