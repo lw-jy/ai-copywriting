@@ -1,0 +1,15 @@
+{
+  "manifest_version": 3,
+  "name": "AI 多平台文案生成",
+  "version": "1.0.0",
+  "description": "跨境电商 AI 文案矩阵生成器 — 一键生成多平台营销文案",
+  "side_panel": {
+    "default_path": "extension.html"
+  },
+  "permissions": ["sidePanel", "storage"],
+  "host_permissions": ["http://127.0.0.1:8787/*", "http://localhost:8787/*"],
+  "background": {
+    "service_worker": "extension.js",
+    "type": "module"
+  }
+}
