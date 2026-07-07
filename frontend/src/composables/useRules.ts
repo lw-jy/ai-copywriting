@@ -1,4 +1,5 @@
 import { ref } from "vue"
+import { apiPath } from "./useAuth"
 
 export interface RuleData {
   platform: string
@@ -19,7 +20,7 @@ export function useRules(getAuthHeader: () => Record<string, string>) {
   async function fetchRules(platform: string) {
     loading.value = true
     try {
-      const res = await fetch(`/api/rules/${platform}`, { headers: getAuthHeader() })
+      const res = await fetch(apiPath(`/api/rules/${platform}`), { headers: getAuthHeader() })
       if (res.ok) {
         const data = await res.json()
         ruleData.value = data
@@ -36,7 +37,7 @@ export function useRules(getAuthHeader: () => Record<string, string>) {
   async function saveRules(platform: string, data: { rules: string[]; outputTitle: string; outputBody: string }) {
     loading.value = true
     try {
-      const res = await fetch(`/api/rules/${platform}`, {
+      const res = await fetch(apiPath(`/api/rules/${platform}`), {
         method: "PUT",
         headers: headers(),
         body: JSON.stringify(data),
@@ -53,7 +54,7 @@ export function useRules(getAuthHeader: () => Record<string, string>) {
   async function uploadText(platform: string, content: string) {
     loading.value = true
     try {
-      const res = await fetch(`/api/rules/upload-text/${platform}`, {
+      const res = await fetch(apiPath(`/api/rules/upload-text/${platform}`), {
         method: "POST",
         headers: headers(),
         body: JSON.stringify({ content }),

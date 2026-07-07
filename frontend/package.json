@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "build:ext": "BUILD_MODE=extension vite build",
+    "build:ext": "cross-env BUILD_MODE=extension vite build",
     "preview": "vite preview"
   },
   "dependencies": {
@@ -19,6 +19,7 @@
     "vue": "^3.5.35"
   },
   "devDependencies": {
+    "cross-env": "^10.1.0",
     "typescript": "5.7.3",
     "vue-tsc": "^2.0.0"
   }

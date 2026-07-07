@@ -34,32 +34,39 @@ app.use(bodyParser());
 app.use(router.routes());
 app.use(router.allowedMethods());
 
-/* ---------- 启动（带重试） ---------- */
+/* ---------- 启动（先连数据库，再监听端口） ---------- */
 
 const MAX_RETRIES = 5;
 const RETRY_DELAY = 600;
 
-function startServer(retriesLeft: number) {
+async function startServer() {
+  // 先连 MongoDB（生产环境必须连上，开发环境可跳过）
+  const dbOk = await connectDB();
+  const isProd = process.env.NODE_ENV === "production";
+  if (!dbOk && isProd) {
+    log.error("MongoDB 连接失败，服务退出");
+    process.exit(1);
+  }
+
+  // 再启动 HTTP
+  tryStart(MAX_RETRIES);
+}
+
+function tryStart(retriesLeft: number) {
   const server = app.listen(PORT);
 
   server.on("listening", () => {
     log.info(`━━━ AI Copywriting API ━━━`);
     log.info(`📡  http://localhost:${PORT}`);
-    log.info(`🟡 Mock 模式 — 无需 API Key，展示示例文案`);
     if (!USE_MOCK) log.info(`🟢 AI 模式启用`);
     log.info(`按 Ctrl+C 停止服务`);
-
-    // 先启动服务，再异步连接数据库（不阻塞启动）
-    connectDB();
   });
 
   server.on("error", (err: NodeJS.ErrnoException) => {
     if (err.code === "EADDRINUSE" && retriesLeft > 0) {
-      log.warn(
-        `端口 ${PORT} 被占用，${RETRY_DELAY}ms 后重试 (剩余 ${retriesLeft} 次)...`,
-      );
+      log.warn(`端口 ${PORT} 被占用，${RETRY_DELAY}ms 后重试 (剩余 ${retriesLeft} 次)...`);
       server.close();
-      setTimeout(() => startServer(retriesLeft - 1), RETRY_DELAY);
+      setTimeout(() => tryStart(retriesLeft - 1), RETRY_DELAY);
     } else {
       log.error(`服务启动失败: ${err.message}`);
       process.exit(1);
@@ -84,4 +91,4 @@ function startServer(retriesLeft: number) {
   process.on("SIGTERM", () => gracefulShutdown("SIGTERM"));
 }
 
-startServer(MAX_RETRIES);
+startServer();

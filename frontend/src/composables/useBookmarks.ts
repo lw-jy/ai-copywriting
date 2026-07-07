@@ -1,4 +1,5 @@
 import { ref } from "vue"
+import { apiPath } from "./useAuth"
 
 export interface BookmarkItem {
   _id: string
@@ -23,7 +24,7 @@ export function useBookmarks(getAuthHeader: () => Record<string, string>) {
 
   async function fetchAll() {
     try {
-      const res = await fetch("/api/bookmarks", { headers: getAuthHeader() })
+      const res = await fetch(apiPath("/api/bookmarks"), { headers: getAuthHeader() })
       if (res.ok) bookmarks.value = await res.json()
     } catch {
       // 静默失败
@@ -48,7 +49,7 @@ export function useBookmarks(getAuthHeader: () => Record<string, string>) {
     rawContent: string
   }): Promise<string | null> {
     try {
-      const res = await fetch("/api/bookmarks", {
+      const res = await fetch(apiPath("/api/bookmarks"), {
         method: "POST",
         headers: headers(),
         body: JSON.stringify(data),
@@ -66,7 +67,7 @@ export function useBookmarks(getAuthHeader: () => Record<string, string>) {
     const id = getBookmarkId(rawContent)
     if (!id) return false
     try {
-      const res = await fetch(`/api/bookmarks/${id}`, {
+      const res = await fetch(apiPath(`/api/bookmarks/${id}`), {
         method: "DELETE",
         headers: getAuthHeader(),
       })

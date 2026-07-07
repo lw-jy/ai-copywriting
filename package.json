@@ -3,7 +3,8 @@
   "private": true,
   "scripts": {
     "dev": "concurrently -k -n fe,be -c cyan,magenta \"cd frontend && npm run dev\" \"cd backend && npm run dev\"",
-    "install:all": "cd frontend && npm install && cd ../backend && npm install"
+    "install:all": "cd frontend && npm install && cd ../backend && npm install",
+    "build:ext": "cd frontend && npm run build:ext"
   },
   "devDependencies": {
     "concurrently": "^9.2.1"

@@ -14,6 +14,8 @@ export interface GenerateInput {
   apiKey?: string
   baseUrl?: string
   model?: string
+  /** 后端 API 地址（扩展用绝对路径，Web 留空走代理） */
+  apiUrl?: string
 }
 
 interface SSEEvent {
@@ -152,7 +154,8 @@ export function useCopyMatrix() {
     controller = new AbortController()
 
     try {
-      await fetchEventSource("/api/generate", {
+      const apiBase = input.apiUrl || ""
+      await fetchEventSource(`${apiBase}/api/generate`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(input),
